@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    public static final String APIKEY = "f896915e4f2e4765f254632549b41209";
     static List<String> currenciesList = new ArrayList<>();
     static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) throws IOException {
@@ -21,30 +20,33 @@ public class Main {
         currenciesList.add("CNY");
         System.out.println("Choose currency one of them => ");
         for (int i = 0; i < currenciesList.size(); i++) {
-            System.out.println((i+1)+ currenciesList.get(i));
+            System.out.println( (i+1) + " -> "+  currenciesList.get(i));
+
         }
-        String currenc = scanner.nextLine();
+        int currenc = scanner.nextInt();
+
+
         LocalDate date = LocalDate.now();
-        URL url = new URL("https://cbu.uz/oz/arkhiv-kursov-valyut/json/" + currenc + "/" + date + " ?=");
+        URL url = new URL("https://cbu.uz/oz/arkhiv-kursov-valyut/json/" + currenciesList.get(currenc -1) + "/" + date + " ?=");
         URLConnection connection = url.openConnection();
         Gson gson = new Gson();
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         ArrayList<Currency> currencies = gson.fromJson(reader,new TypeToken<ArrayList<Currency>>(){}.getType());
             boolean run = true;
             while (run){
-                System.out.println(" 1=> " + currenc + " ning so'mga nisbati ");
-                System.out.println(" 2=> So'mni " + currenc + " ga nisbati ");
+                System.out.println(" 1=> " + currenciesList.get(currenc-1) + " ning so'mga nisbati ");
+                System.out.println(" 2=> So'mni " + currenciesList.get(currenc-1) + " ga nisbati ");
                 System.out.println(" 0=> tizimdan chiqish");
                 scanner = new Scanner(System.in);
                 int choose = scanner.nextInt();
                 switch (choose){
                     case 1:
-                        System.out.println(currenc + " miqdorini kiriting");
+                        System.out.println(currenciesList.get(currenc-1) +  " miqdorini kiriting");
                         int money = scanner.nextInt();
                         for (Currency currency : currencies) {
-                            if ((currency.getCcy().equalsIgnoreCase(currenc)|| currency.getCcy().equalsIgnoreCase(currenc)|| currency.getCcy().equalsIgnoreCase(currenc))){
+                            if ((currency.getCcy().equalsIgnoreCase(currenciesList.get(currenc-1)))){
                                 double sum = Double.parseDouble(currency.getRate());
-                                System.out.println(money*sum + " So'm ");
+                                System.out.println(money*sum + " So'm " + money + " ta " +  currenciesList.get(currenc-1));
                             }
                         }
                         break;
@@ -52,9 +54,9 @@ public class Main {
                         System.out.println("So'm  miqdorini kiriting");
                         int money2 = scanner.nextInt();
                         for (Currency currency : currencies) {
-                            if ((currency.getCcy().equalsIgnoreCase(currenc)||currency.getCcy().equalsIgnoreCase(currenc)||currency.getCcy().equalsIgnoreCase(currenc))){
+                            if ((currency.getCcy().equalsIgnoreCase(currenciesList.get(currenc-1)))){
                                 double sum2 = Double.parseDouble(currency.getRate());
-                                System.out.println(money2/sum2 + currenc);
+                                System.out.println(money2/sum2 +  " " + currenciesList.get(currenc-1));
                             }
                         }
                         break;
